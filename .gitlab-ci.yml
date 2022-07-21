@@ -1,0 +1,54 @@
+stages:
+  - build
+  - deploy
+
+image: node:14-alpine
+
+cache:
+  paths:
+    - node_modules/
+    - dist/
+
+build:
+  stage: build
+  script:
+    - npm i
+    - npm run build
+
+deploy-test:
+  environment: Test
+  stage: deploy
+  before_script:
+    - apk add zip
+    - apk add openssh-client
+    - apk add curl
+    - eval $(ssh-agent -s)
+    - echo "$SSH_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+  script:
+    - zip -r production.zip dist package.json
+    - scp -o StrictHostKeyChecking=no production.zip $USER@$HOST:$PATH_TEST
+    - ssh -o StrictHostKeyChecking=no $USER@$HOST $COMMAND_TEST
+    - curl -X POST -d "$SLACK_DATA" $SLACK_URL
+  except:
+    - master
+    - tags
+# deploy:
+#   stage: deploy
+#   environment: Production
+#   before-script:
+#     - apk add zip
+#     - apk add openssh-client
+#     - eval $(ssh-agent -s)
+#     - echo "$SSH_KEY" | tr -d '\r' | ssh-add -
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#   script:
+#     - zip -r production.zip dist package.json
+#     - scp -o StrictHostKeyChecking=no production.zip $USER@$HOST:$PATH_PRODUCTION
+#     - ssh -o StrictHostKeyChecking=no $USER@$HOST $COMMAND_PRODUCTION
+#     - curl -X POST -d "$SLACK_DATA" $SLACK_URL
+#   only:
+#     - master
+#     - tags
