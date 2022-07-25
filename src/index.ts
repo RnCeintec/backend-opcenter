@@ -28,6 +28,7 @@ import {
   pymentTypes,
   dashboard,
   facturas,
+  vendedor,
 } from "./security";
 // import { Category } from './core/entities';
 
@@ -68,6 +69,7 @@ const main = async () => {
   app.use(pymentTypes);
   app.use(dashboard);
   app.use(facturas);
+  app.use(vendedor);
 
   // routes
   Routes({ app, version: "/api/v1/" });
