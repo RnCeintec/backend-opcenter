@@ -69,7 +69,7 @@ const main = async () => {
   app.use(pymentTypes);
   app.use(dashboard);
   app.use(facturas);
-  app.use(vendedor);
+  // app.use(vendedor);
 
   // routes
   Routes({ app, version: "/api/v1/" });

@@ -11,6 +11,7 @@ import shopRoute from './shop.route';
 import dashboardRoute from './dashboar.route';
 
 import facturasRoute from './facturas.routes';
+import vendedorRoute from './vendedor.route';
 
 export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, userRoute);
@@ -22,6 +23,6 @@ export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, pymentTypesRoute);
   app.use(version, shopRoute);
   app.use(version, dashboardRoute);
-  app.use(version, facturasRoute);
+  app.use(version, vendedorRoute);
 
 };
