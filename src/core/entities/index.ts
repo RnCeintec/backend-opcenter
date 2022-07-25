@@ -6,3 +6,4 @@ export { PymentType } from './pymentTypes';
 export { Shop } from './shop';
 export { Client } from './client';
 export { User } from './user';
+export { Monturas } from './monturas';

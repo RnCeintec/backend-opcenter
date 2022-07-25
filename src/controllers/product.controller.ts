@@ -10,13 +10,14 @@ import { Hateoas } from '../utils';
 
 export const createProduct = async (req:Request,res:Response): Promise<Response> =>{
     try{
-        const {codigo,description,precio_compra,precio_sugerido,categoria,stock} = req.body
+        const {codigo,description,precio_compra,precio_sugerido,precio_minimo,categoria,stock} = req.body
         const product = new Product()
         product.codigo = codigo 
         product.stock = stock 
         product.descripcion = description 
         product.precio_compra = precio_compra 
         product.precio_sugerido = precio_sugerido 
+        product.precio_minimo = precio_minimo 
         product.category = categoria 
        
         // const result =  getRepository(Product).create(product);
@@ -32,7 +33,7 @@ export const createProduct = async (req:Request,res:Response): Promise<Response>
 
 export const updateProduct = async (req:Request,res:Response): Promise<Response> =>{
     try{
-        const {codigo,description,precio_compra,precio_sugerido,stock,categoria} = req.body
+        const {codigo,description,precio_compra,precio_sugerido,precio_minimo,stock,categoria} = req.body
         const product = await getRepository(Product).findOne(req.params.id)
         if(!product){
           return  res.status(404).json({message:"Dede enviar id del producto"})
@@ -43,6 +44,8 @@ export const updateProduct = async (req:Request,res:Response): Promise<Response>
         product.descripcion = description ??  product.descripcion
         product.precio_compra = precio_compra ?? product.precio_compra 
         product.precio_sugerido = precio_sugerido ?? product.precio_sugerido 
+        product.precio_minimo = precio_minimo  ??  product.precio_minimo
+
         product.category = categoria ?? product.category 
 
         const result = await updateProductInteractor(product)

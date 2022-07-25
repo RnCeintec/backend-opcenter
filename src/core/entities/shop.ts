@@ -7,6 +7,7 @@ import {
   OneToMany,
   ColumnTypeUndefinedError,
 } from "typeorm";
+import { Monturas } from "./monturas";
 
 import { Sales } from "./sales";
 
@@ -55,4 +56,7 @@ export class Shop {
 
   @Column()
   codDomicilioFiscal!: string;
+
+  @OneToMany(() => Monturas, (monturas) => monturas.tienda)
+  monturas!: Monturas[];
 }

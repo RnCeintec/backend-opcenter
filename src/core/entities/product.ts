@@ -41,7 +41,10 @@ export class Product {
     @Column({type:'decimal',precision: 10, scale: 2, default: 0 })
     precio_sugerido !: number;
 
-    @Column()
+    @Column({type:'decimal',precision: 10, scale: 2, default: 0 })
+    precio_minimo !: number;
+
+    @Column({default:0})
     stock!: number;
 
 

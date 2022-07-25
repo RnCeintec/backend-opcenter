@@ -11,6 +11,7 @@ import shopRoute from './shop.route';
 import dashboardRoute from './dashboar.route';
 
 import facturasRoute from './facturas.routes';
+import monturasRoute from './monturas.route';
 
 export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, userRoute);
@@ -23,5 +24,5 @@ export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, shopRoute);
   app.use(version, dashboardRoute);
   app.use(version, facturasRoute);
-
+  app.use(version, monturasRoute);
 };
