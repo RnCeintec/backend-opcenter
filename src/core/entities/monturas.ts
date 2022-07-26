@@ -66,7 +66,7 @@ export class Monturas {
   // ingreso!: IngresoMonturas;
 
   @ManyToOne(() => IngresoMonturas, (ingreso) => ingreso.monturas)
-  ingreso!: IngresoMonturas[];
+  ingreso!: IngresoMonturas;
 
   @Column()
   enmovimiento!: string;

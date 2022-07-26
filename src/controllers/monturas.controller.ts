@@ -6,16 +6,35 @@ import {Monturas} from '../core/entities/monturas'
 import {createMonturasInteractor, updateMonturasInteractor, deleteMonturasInteractor} from '../core/interactor/monturas';
 import { encrypt } from '../utils';
 import { Hateoas } from '../utils';
+import { IngresoMonturas } from '../core/entities/ingreso_monturas';
 
 
 export const createMonturas = async (req:Request,res:Response): Promise<Response> =>{
     try{
         const {marca,modelo,tipo,talla,puente,codImpreso,procedencia,color,
             estuche,comentario,costo,venta,venta_id,idIngreso,enmovimiento,
-            tope,tienda_id
+            tope,tienda_id,idproveedor,documento,numero,idmontura,cantidad
         
         } = req.body
+      for(let i =0 ; i<=cantidad ;i++){
         const monturas = new Monturas()
+        const ingreso_monturas = new IngresoMonturas()
+
+        ingreso_monturas.documento= documento
+        ingreso_monturas.numero_documento= numero
+
+        const ingresoDetalle = await getRepository(IngresoMonturas).save(ingreso_monturas)
+        const monturaId = await getRepository(Monturas).find({
+          order: {
+              id: "DESC",
+          },
+          take:1
+        });
+        let codigoMontura = (monturaId[0].id + 1).toString().padStart(6,"0")
+
+
+
+        monturas.idmontura = codigoMontura
         monturas.marca = marca 
         monturas.codImpreso = codImpreso 
         monturas.modelo = modelo 
@@ -29,15 +48,19 @@ export const createMonturas = async (req:Request,res:Response): Promise<Response
         monturas.costo = costo 
         monturas.venta = venta  
         monturas.ventas = venta_id 
-        monturas.ingreso = idIngreso 
+        monturas.ingreso = ingresoDetalle
         monturas.enmovimiento = enmovimiento 
         monturas.tope = tope 
         monturas.tienda = tienda_id 
-
-        // const result =  getRepository(Product).create(product);
-
         const result = await createMonturasInteractor(monturas)
-        return res.json({result:result})
+
+        
+
+
+      
+        // return res.json({result:result})
+      }
+      return res.json({message:"creado con exito"})
 
     }catch(error:any){
         throw res.status(500).json({message: error.message ?? error})
@@ -55,7 +78,15 @@ export const updateMonturas= async (req:Request,res:Response): Promise<Response>
           return  res.status(404).json({message:"Dede enviar id del producto"})
         }
 
+     const monturaId = await getRepository(Monturas).find({
+          order: {
+              id: "DESC",
+          },
+          take:1
+        });
+        let codigoMontura = (monturaId[0].id + 1).toString().padStart(6,"0")
         monturas.marca = marca ??  monturas.marca
+        monturas.idmontura = codigoMontura
         monturas.codImpreso = codImpreso ?? monturas.codImpreso
         monturas.modelo = modelo  ?? monturas.modelo
         monturas.tipo = tipo ??  monturas.tipo
@@ -176,7 +207,27 @@ export const listMonturas = async (req:Request,res:Response): Promise<Response> 
         throw res.status(500).json({message: error.message ?? error})
       }
 }
+export const ultimaMontura = async (req:Request,res:Response): Promise<Response> =>{
+  try {
 
+    const montura = await getRepository(Monturas).find({
+      order: {
+          id: "DESC",
+      },
+      take:1
+    });
+    let id = (montura[0].id+1).toString().padStart(6,"0")
+
+    return res.json({result:{id:id}})
+
+
+
+
+  }catch(error:any){
+    throw res.status(500).json({message: error.message ?? error})
+  }
+
+}
 
 // export const  searchProduct  = async (req:Request,res:Response): Promise<Response> =>{
 

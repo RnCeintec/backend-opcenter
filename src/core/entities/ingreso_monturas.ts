@@ -10,6 +10,7 @@ import {
     Timestamp
 } from 'typeorm';
 import { Monturas } from './monturas';
+import { Proveedor } from './proveedor';
 
 @Entity({ name: 'ingreso_monturas' })
 export class IngresoMonturas {
@@ -22,8 +23,8 @@ export class IngresoMonturas {
     @Column()
     hora!: string
 
-    @Column()
-    proveedor_id!: number
+    @ManyToOne(() => Proveedor, (proveedor) => proveedor.ingreso)
+    proveedor!: Proveedor;
 
     @Column()
     documento!: string
@@ -41,7 +42,7 @@ export class IngresoMonturas {
     fecha_actualizacion!: Date;
 
     @OneToMany(() => Monturas, (monturas) => monturas.ingreso)
-  monturas!: Monturas[];
+  monturas!: Monturas;
 
 
 
