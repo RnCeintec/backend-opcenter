@@ -16,6 +16,7 @@ import { Shop } from "./shop";
 import { PymentType } from "./pymentTypes";
 import { SalesDetails } from "./salesDetails";
 import { Facturas } from "./facturas";
+import { Monturas } from "./monturas";
 enum STipoMoneda {
   "PEN" = "PEN",
   "USD" = "USD",
@@ -96,4 +97,7 @@ export class Sales {
 
   @ManyToOne(() => Shop, (shop) => shop.ventas)
   shop!: Shop;
+
+  @OneToMany(() => Monturas, (monturas) => monturas.ventas)
+  monturas!: Monturas[];
 }
