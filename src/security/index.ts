@@ -9,3 +9,4 @@ export { default as pymentTypes } from "./pymentTypes";
 export { default as dashboard } from "./dashboard";
 export { default as facturas } from "./facturas";
 export { default as vendedor } from "./vendedor";
+export { default as proveedor } from "./proveedor";
