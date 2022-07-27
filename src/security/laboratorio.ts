@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-
+//probando
 export default async (req: Request, res: Response, next: Function) => {
   const { path } = req;
 
