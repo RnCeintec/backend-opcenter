@@ -9,3 +9,4 @@ export { User } from "./user";
 export { Vendedor } from "./vendedor";
 export { Monturas } from "./monturas";
 export { Proveedor } from "./proveedor";
+export { Laboratorio } from "./laboratorio";
