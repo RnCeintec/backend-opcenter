@@ -1,47 +1,50 @@
 import internal from 'stream';
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    UpdateDateColumn,
-    OneToMany,
-    ManyToOne,
-    Timestamp
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+  ManyToOne,
+  Timestamp
 } from 'typeorm';
 import { Monturas } from './monturas';
 import { Proveedor } from './proveedor';
 
 @Entity({ name: 'ingreso_monturas' })
 export class IngresoMonturas {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column()
-    fecha!: Date
+  @Column({ default: true })
+  isActive!: boolean;
 
-    @Column()
-    hora!: string
+  @Column()
+  fecha!: Date
 
-    @ManyToOne(() => Proveedor, (proveedor) => proveedor.ingreso)
-    proveedor!: Proveedor;
+  @Column()
+  hora!: string
 
-    @Column()
-    documento!: string
+  @ManyToOne(() => Proveedor, (proveedor) => proveedor.ingreso)
+  proveedor!: Proveedor;
 
-    @Column()
-    numero_documento!: string
+  @Column()
+  documento!: string
+
+  @Column()
+  numero_documento!: string
 
 
-    @Column()
-    @CreateDateColumn()
-    fecha_creacion!: Date;
+  @Column()
+  @CreateDateColumn()
+  fecha_creacion!: Date;
 
-    @Column()
-    @UpdateDateColumn()
-    fecha_actualizacion!: Date;
+  @Column()
+  @UpdateDateColumn()
+  fecha_actualizacion!: Date;
 
-    @OneToMany(() => Monturas, (monturas) => monturas.ingreso)
+  @OneToMany(() => Monturas, (monturas) => monturas.ingreso)
   monturas!: Monturas;
 
 

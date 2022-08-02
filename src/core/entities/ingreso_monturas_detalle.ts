@@ -14,6 +14,8 @@ import {
 export class IngresoMonturasDetalle {
     @PrimaryGeneratedColumn()
     id!: number;
+    @Column({ default: true })
+    isActive!: boolean;
 
     @Column()
     idmontura!: string
