@@ -12,8 +12,9 @@ import dashboardRoute from "./dashboar.route";
 
 import facturasRoute from "./facturas.routes";
 import vendedorRoute from "./vendedor.route";
-import monturasRoute from './monturas.route';
-import proveedorRoute from './proveedor.route';
+import monturasRoute from "./monturas.route";
+import proveedorRoute from "./proveedor.route";
+import laboratorioRoute from "./laboratorio.route";
 
 export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, userRoute);
@@ -29,5 +30,5 @@ export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, facturasRoute);
   app.use(version, monturasRoute);
   app.use(version, proveedorRoute);
-
+  app.use(version, laboratorioRoute);
 };

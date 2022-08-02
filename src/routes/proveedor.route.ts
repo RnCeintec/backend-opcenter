@@ -1,14 +1,19 @@
-import {Router} from 'express'
-import {listProveedor} from '../controllers/proveedor.controller'
+import { Router } from "express";
+import {
+  createProveedor,
+  updateProveedor,
+  deleteProveedor,
+  listProveedor,
+  searchProveedor,
+} from "../controllers/proveedor.controller";
 
-const router = Router()
+const router = Router();
 
-// router.post('/monturas',createMonturas);
-// router.put('/monturas/:id',updateMonturas);
-// // router.delete('/product/:id',deleteProduct);
-router.get('/proveedor',listProveedor);
+router.post("/proveedor", createProveedor);
+router.put("/proveedor/:id", updateProveedor);
+router.delete("/proveedor/:id", deleteProveedor);
+router.get("/proveedor", listProveedor);
+router.get("/proveedor/:id", searchProveedor);
 // router.get('/ultimaMonturas',ultimaMontura);
-
-// router.get('/product/:id',searchProduct);
 
 export default router;
