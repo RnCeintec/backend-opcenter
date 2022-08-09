@@ -1,4 +1,4 @@
-import { Sales, Product, SalesDetails } from "../core/entities";
+import { Sales, Product, SalesDetails, Diotrias } from "../core/entities";
 
 import { Response, Request } from "express";
 import {
@@ -13,6 +13,7 @@ import {
 import dayjs from "dayjs";
 import moment from "moment";
 import { product } from "security";
+import { Hateoas } from "../utils"; //
 
 export const getDashboard = async (
   req: Request,
@@ -25,6 +26,27 @@ export const getDashboard = async (
     order: { fecha_actualizacion: "DESC" },
     take: 5,
   });
+  const { limit, offset, search } = req.query;
+
+  const hateoas = new Hateoas({
+    limit: limit ? `${limit}` : undefined,
+    offset: offset
+      ? // ? search && search !== ''
+        //   ? undefined
+        `${offset}`
+      : undefined,
+  });
+  const take = hateoas.take;
+  const skip = hateoas.skip;
+  const [pedidosLunas] = await createQueryBuilder(Diotrias, "d")
+  .select(["d", "p","di"])
+  .innerJoin("d.paciente", "p", "d.pacienteId = p.id")
+  .innerJoin("d.diotria_id", "di", "d.diotria_id = di.id")
+  .orderBy("d.id", "DESC")
+  .groupBy("d.diotria_id")
+  .skip(skip * take)
+  .take(take)
+  .getManyAndCount();
 
   // const masVendidos = await createQueryBuilder(SalesDetails, "d")
   //   .select(["d.cantidad", "p"])
@@ -106,5 +128,6 @@ export const getDashboard = async (
     TgananciaMensual,
     ultimasVentas,
     masVendidos,
+    pedidosLunas
   });
 };

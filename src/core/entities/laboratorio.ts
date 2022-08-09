@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from "typeorm";
+import { Diotrias } from "./dioptrias";
 
 @Entity({ name: "productolaboratorio" })
 export class Laboratorio {
@@ -34,4 +35,7 @@ export class Laboratorio {
   @Column()
   @UpdateDateColumn()
   fecha_actualizacion!: Date;
+
+  @OneToMany(() => Diotrias, (diotrias) => diotrias.laboratorio)
+  diotrias!: Diotrias;
 }

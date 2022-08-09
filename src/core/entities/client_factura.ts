@@ -8,7 +8,6 @@ import {
   } from 'typeorm';
 
   import { isDocumentPE,isPhoneNumber } from '../validators';
-import { Diotrias } from './dioptrias';
 
   import {Sales} from './sales'
 
@@ -19,8 +18,8 @@ import { Diotrias } from './dioptrias';
     pasaporte = 'pasaporte'
   }
 
-  @Entity({name: 'clientes'})
-    export class Client{
+  @Entity({name: 'clientes_factura'})
+    export class ClientFactura{
         @PrimaryGeneratedColumn()
         id !: number
 
@@ -57,8 +56,6 @@ import { Diotrias } from './dioptrias';
     @Column()
         @UpdateDateColumn()
         fecha_actualizacion!: Date;
-    
-    @OneToMany(() => Diotrias, (diotrias) => diotrias.paciente)
-    diotrias!: Diotrias;
+
         
     }

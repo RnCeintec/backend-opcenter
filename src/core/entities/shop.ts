@@ -7,6 +7,7 @@ import {
   OneToMany,
   ColumnTypeUndefinedError,
 } from "typeorm";
+import { Diotrias } from "./dioptrias";
 import { Monturas } from "./monturas";
 
 import { Sales } from "./sales";
@@ -59,4 +60,7 @@ export class Shop {
 
   @OneToMany(() => Monturas, (monturas) => monturas.tienda)
   monturas!: Monturas[];
+
+  @OneToMany(() => Diotrias, (diotrias) => diotrias.tienda)
+  diotrias!: Diotrias;
 }

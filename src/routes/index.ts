@@ -5,6 +5,7 @@ import loginRoute from "./auth.route";
 import productRoute from "./product.route";
 import categoryRoute from "./category.route";
 import clientRoute from "./client.route";
+import clientfacturaRoute from "./client_factura.route";
 import salesRoute from "./sales.route";
 import pymentTypesRoute from "./pymentTypes.route";
 import shopRoute from "./shop.route";
@@ -15,6 +16,7 @@ import vendedorRoute from "./vendedor.route";
 import monturasRoute from "./monturas.route";
 import proveedorRoute from "./proveedor.route";
 import laboratorioRoute from "./laboratorio.route";
+import diotriasRoute from "./diotrias.route";
 
 export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, userRoute);
@@ -31,4 +33,7 @@ export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, monturasRoute);
   app.use(version, proveedorRoute);
   app.use(version, laboratorioRoute);
+  app.use(version, clientfacturaRoute);
+  app.use(version, diotriasRoute);
+
 };

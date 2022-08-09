@@ -17,6 +17,7 @@ import { PymentType } from "./pymentTypes";
 import { SalesDetails } from "./salesDetails";
 import { Facturas } from "./facturas";
 import { Monturas } from "./monturas";
+import { Diotrias } from "./dioptrias";
 enum STipoMoneda {
   "PEN" = "PEN",
   "USD" = "USD",
@@ -100,4 +101,7 @@ export class Sales {
 
   @OneToMany(() => Monturas, (monturas) => monturas.ventas)
   monturas!: Monturas[];
+
+  @OneToMany(() => Diotrias, (diotrias) => diotrias.venta)
+  diotrias!: Diotrias;
 }
