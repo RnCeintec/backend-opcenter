@@ -105,8 +105,8 @@ export const createSale = async (
       tipo_comprobante == "boleta"
         ? "B001-" + `${numCompro.correlativo}`.padStart(8, "0")
         : tipo_comprobante == "factura"
-        ? "F001-" + `${numCompro.correlativo}`.padStart(8, "0")
-        : "T001-" + `${numCompro.correlativo}`.padStart(8, "0");
+          ? "F001-" + `${numCompro.correlativo}`.padStart(8, "0")
+          : "T001-" + `${numCompro.correlativo}`.padStart(8, "0");
 
     const subtotal = +(total / 1.18).toFixed(2);
     sales.clientes = cliente_id;
@@ -121,28 +121,35 @@ export const createSale = async (
     sales.igv = +(total - subtotal).toFixed(2);
 
     const igvT = +(total - subtotal).toFixed(2);
-
     if (productos.length <= 0)
       return res.status(400).json({ message: "Debe enviar productos" });
 
-    const [producto, productsNotAvailable] = await validarStockSalestInteractor(
-      {
-        productos: productos.map((item: any) => {
-          return { producto: item["id"], cantidad: item["cantidad"] };
-        }),
-      }
-    );
+    if (productos[0]["category"] != "Lunas") {
 
-    //* Si hay productos que no están disponibles con el criterio anterior regresa un estado 400
-    if (productsNotAvailable.length > 0)
-      return res.status(400).json({
-        message: "Hay Productos que no cuentan con el stock solicitado",
-        result: [...productsNotAvailable],
-      });
+      const [producto, productsNotAvailable] = await validarStockSalestInteractor(
+        {
+          productos: productos.map((item: any) => {
+            return { producto: item["id"], cantidad: item["cantidad"] }
+          }),
+        }
+      );
+
+
+      //* Si hay productos que no están disponibles con el criterio anterior regresa un estado 400
+
+      if (productsNotAvailable.length > 0)
+        return res.status(400).json({
+          message: "Hay Productos que no cuentan con el stock solicitado",
+          result: [...productsNotAvailable],
+        });
+    }
 
     const result = await createSalestInteractor(sales);
 
     const newDetVenta = await createSalesDetailstInteractor(productos, result);
+
+
+    if (productos[0]["category"] != "Lunas") {
 
     productos.map(async (product: any) => {
       const productoUpdate = await getRepository(Product).findOne({
@@ -155,6 +162,7 @@ export const createSale = async (
       getRepository(Product).merge(productoUpdate, newUpdate);
       await getRepository(Product).save(productoUpdate);
     });
+  }
 
     const update = {
       correlativo: numCompro.correlativo + 1,
@@ -264,8 +272,8 @@ export const listSale = async (
       limit: limit ? `${limit}` : undefined,
       offset: offset
         ? // ? search && search !== ''
-          //   ? undefined
-          `${offset}`
+        //   ? undefined
+        `${offset}`
         : undefined,
     });
     const take = hateoas.take;
@@ -312,11 +320,11 @@ export const listSale = async (
     const [hateoasLink, pages] = hateoas.hateoas({ count });
     return result
       ? res.status(200).json({
-          result,
-          count,
-          link: hateoasLink,
-          pages: pages === 0 ? 1 : pages,
-        })
+        result,
+        count,
+        link: hateoasLink,
+        pages: pages === 0 ? 1 : pages,
+      })
       : res.status(404).json({ message: "No existen ventas" });
   } catch (error: any) {
     throw res.status(500).json({ message: error.message ?? error });
@@ -354,8 +362,8 @@ export const searchSaleXDate = async (
       limit: limit ? `${limit}` : undefined,
       offset: offset
         ? // ? search && search !== ''
-          //   ? undefined
-          `${offset}`
+        //   ? undefined
+        `${offset}`
         : undefined,
     });
     const take = hateoas.take;
@@ -375,8 +383,7 @@ export const searchSaleXDate = async (
       .innerJoin("d.ventas", "s", "d.ventasId = s.id")
       .innerJoin("d.product", "p", "d.productId = p.id")
       .where(
-        `s.fecha_creacion BETWEEN '${fechaInicio ?? fechaInicio2}' AND '${
-          fechaFin ?? fechaFin2
+        `s.fecha_creacion BETWEEN '${fechaInicio ?? fechaInicio2}' AND '${fechaFin ?? fechaFin2
         }' `
       )
       .groupBy("s.id")
@@ -405,8 +412,7 @@ export const searchSaleXDate = async (
       .innerJoin("s.salesDetails", "sd", "s.id = sd.ventasId")
       .innerJoin("sd.product", "pr", "pr.id = sd.productId")
       .where(
-        `s.fecha_creacion BETWEEN '${fechaInicio ?? fechaInicio2}' AND '${
-          fechaFin ?? fechaFin2
+        `s.fecha_creacion BETWEEN '${fechaInicio ?? fechaInicio2}' AND '${fechaFin ?? fechaFin2
         }'`
       )
       .orderBy("s.id", "DESC")
@@ -418,13 +424,13 @@ export const searchSaleXDate = async (
 
     return result
       ? res.status(200).json({
-          result,
-          ganancias: Tganancia,
-          totalVentas: Tventas,
-          count,
-          link: hateoasLink,
-          pages: pages === 0 || isNaN(pages) ? 1 : pages,
-        })
+        result,
+        ganancias: Tganancia,
+        totalVentas: Tventas,
+        count,
+        link: hateoasLink,
+        pages: pages === 0 || isNaN(pages) ? 1 : pages,
+      })
       : res.status(404).json({ message: "No existen ventas" });
 
     // return res.json({ganancias:Tganancia,totalVentas:Tventas,result:vestasXfechas})

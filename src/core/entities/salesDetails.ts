@@ -38,4 +38,7 @@ export class SalesDetails {
 
   @ManyToOne(() => Product, (product) => product.salesDetails)
   product!: Product;
+
+  @Column({default:null})
+  tipo_producto!: string
 }

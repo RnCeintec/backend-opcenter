@@ -104,4 +104,6 @@ export class Sales {
 
   @OneToMany(() => Diotrias, (diotrias) => diotrias.venta)
   diotrias!: Diotrias;
+
+
 }

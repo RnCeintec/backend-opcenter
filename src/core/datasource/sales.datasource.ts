@@ -4,6 +4,7 @@ import { Sales } from "../entities/sales";
 import { SalesDetails } from "../entities/salesDetails";
 import { SalesRepository } from "../repository/sales.repository";
 import { Product } from "../entities/product";
+import { Diotrias } from "../entities/dioptrias";
 export class SalesTypeORM implements SalesRepository {
   async findSalestByid(id: number): Promise<Sales | undefined> {
     try {
@@ -31,17 +32,35 @@ export class SalesTypeORM implements SalesRepository {
     try {
       const detalleVentas = new SalesDetails();
       productos.map(async (item: any) => {
+        if(item.category!="Lunas"){
         const producto = await getRepository(Product).findOne({
           where: { id: item["id"], isActive: true },
         });
+      
         if (!producto) {
           throw "Producto no existe";
         }
+      
         detalleVentas.product = item["id"];
         detalleVentas.cantidad = item["cantidad"];
         detalleVentas.salePrice = producto.precio_sugerido;
         detalleVentas.ventas = result;
+        detalleVentas.tipo_producto = "Lunas"
         const detalle = await getRepository(SalesDetails).save(detalleVentas);
+      }else{
+          const producto = await getRepository(Diotrias).findOne({
+            where: { id: item["id"], isActive: true },
+          }); 
+          if (!producto) {
+            throw "Producto no existe";
+          }
+        
+          detalleVentas.product = item["id"];
+          detalleVentas.cantidad = item["cantidad"];
+          detalleVentas.salePrice = +producto.precio;
+          detalleVentas.ventas = result;
+          const detalle = await getRepository(SalesDetails).save(detalleVentas);
+      }
       });
       const [sales] = await getRepository(Sales).find(result);
       return sales;
